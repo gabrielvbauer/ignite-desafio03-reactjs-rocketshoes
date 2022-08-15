@@ -34,7 +34,16 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
   const addProduct = async (productId: number) => {
     try {
-      // TODO
+      const productHasStockResponse = await api.get(`/stock/${productId}`);
+      
+      if (!productHasStockResponse.data) return
+      if (productHasStockResponse.data.amount < 1) return
+
+      const response = await api.get(`/products/${productId}`);
+      setCart([...cart, {
+        ...response.data,
+        amount: 1
+      }])
     } catch {
       // TODO
     }
@@ -42,7 +51,10 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
   const removeProduct = (productId: number) => {
     try {
-      // TODO
+      const cartWithoutProductToBeRemoved = cart.filter((product) => {
+        return product.id !== productId;
+      })
+      setCart(cartWithoutProductToBeRemoved);
     } catch {
       // TODO
     }
@@ -53,7 +65,13 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     amount,
   }: UpdateProductAmount) => {
     try {
-      // TODO
+      const productHasStockResponse = await api.get(`/stock/${productId}`);
+      
+      if (!productHasStockResponse.data) return false
+
+      if (amount > productHasStockResponse.data.amount) return false;
+
+      
     } catch {
       // TODO
     }
