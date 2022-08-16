@@ -8,18 +8,7 @@ import { useCart } from '../../hooks/useCart';
 
 const Header = (): JSX.Element => {
   const {cart} = useCart();
-  
-  const uniqueItems: Number[] = [];
-  const cartSize = cart.filter((product) => {
-    const isDuplicate = uniqueItems.includes(product.id)
-
-    if (!isDuplicate) {
-      uniqueItems.push(product.id)
-      return true;
-    }
-
-    return false;
-  }).length;
+  const cartSize = cart.length
 
   return (
     <Container>
